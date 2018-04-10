@@ -1,0 +1,52 @@
+regCenter:
+  serverList: XXXX:2181 #注册中心 zk的 修改自己IP
+  namespace: XXXX # 命名空间 修改自己的
+simpleJob:
+  cron: 0/15 * * * * ? #定时规则
+  shardingTotalCount: 2 #分片数
+  shardingItemParameters: 0=A,1=B #分片策略
+  cron1: 0/20 * * * * ? #定时规则
+  shardingTotalCount1: 3 #分片数
+  shardingItemParameters1: 0=A,1=B,2=C #分片策略
+
+#***************************************************************#
+#         数据库连接是为了记录定时内容记录                          #
+#                                                               #
+#***************************************************************#
+spring:
+  datasource:
+    url: jdbc:p6spy:mysql://xxxx:3306/xxx?characterEncoding=utf-8&rewriteBatchedStatements=true #数据源
+    username: xxxx #用户名
+    password: xxxx #密码
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    type: com.alibaba.druid.pool.DruidDataSource
+    #初始化连接数量，最大最小连接数
+    initialSize: 5
+    maxActive: 10
+    minIdle: 3
+    #获取连接等待超时的时间
+    maxWait: 600000
+    #超过时间限制是否回收
+    removeAbandoned: true
+    #超过时间限制多长
+    removeAbandonedTimeout: 180
+    #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    timeBetweenEvictionRunsMillis: 600000
+    #配置一个连接在池中最小生存的时间，单位是毫秒
+    minEvictableIdleTimeMillis: 300000
+    #用来检测连接是否有效的sql，要求是一个查询语句
+    validationQuery: SELECT 1 FROM DUAL
+    #申请连接的时候检测
+    testWhileIdle: true
+    #申请连接时执行validationQuery检测连接是否有效，配置为true会降低性能
+    testOnBorrow: false
+    #归还连接时执行validationQuery检测连接是否有效，配置为true会降低性能
+    testOnReturn: false
+    #打开PSCache，并且指定每个连接上PSCache的大小
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 50
+    #属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有：
+    #监控统计用的filter:stat 日志用的filter:log4j 防御SQL注入的filter:wall
+    filters: stat
+    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
